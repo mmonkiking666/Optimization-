@@ -35,7 +35,7 @@ $$\min_{\beta} \frac{1}{2n} \| y - X\beta \|_2^2 + \lambda \| \beta \|_1$$
 
 在 ADMM 算法中，惩罚参数 $\rho$ (rho) 是影响收敛效率的关键超参数。为了寻找最优解，我们对 $\rho$ 进行了敏感性测试，取值范围为 $\{0.5, 1, 2, 5\}$。
 
-![LASSO Convergence Plot](Figure_2.jpg)
+![LASSO Convergence Plot](Figure_2.png)
 *(图示：100次随机实验下的算法收敛曲线对比)*
 
 根据实验结果（如上图所示），我们观察到：
