@@ -7,7 +7,7 @@
 本项目通过系统的数值实验，全面比较了多种优化算法及其变体在求解 **LASSO (Least Absolute Shrinkage and Selection Operator)** 回归问题时的收敛性能。研究不仅涵盖了经典算法，还深入分析了**动态策略**（如重启机制、参数调优）对算法性能的影响机制。
 
 目标函数定义为：
-$$\min_{\beta} \frac{1}{2n} \|| y - X\beta \||_2^2 + \lambda \|| \beta \||_1$$
+$$\min_{\beta} \frac{1}{2n} \| y - X\beta \|_2^2 + \lambda \| \beta \|_1$$
 
 ## 🛠️ 实验设置 (Experimental Setup)
 
@@ -17,15 +17,15 @@ $$\min_{\beta} \frac{1}{2n} \|| y - X\beta \||_2^2 + \lambda \|| \beta \||_1$$
 * **正则化强度**: $\lambda = 0.1 \times \lambda_{\text{max}}$, 其中 $\lambda_{\text{max}} = \|X^Ty\|_\infty/n$
 * **实验机制**: 独立重复实验 **100次**，确保统计显著性
 * **基准真值**: 使用scikit-learn的Lasso求解器获得高精度 $f^*$ 参考值
+![LASSO Convergence Plot](Figure_2.png)
+*(图示：100次随机实验下的算法收敛曲线对比)*
 
 ### 可视化方案
 * **细淡色线 (Cloud Traces)**: 单次实验轨迹，反映算法稳定性
 * **粗实线 (Mean Performance)**: 平均收敛路径，表征期望性能
 * **对数坐标**: y轴采用对数尺度，清晰展示收敛速率差异
-![LASSO Convergence Plot](Figure_2.png)
-*(图示：100次随机实验下的算法收敛曲线对比)*
 
-根据实验结果（如上图所示），我们观察到：
+
 ## 🚀 实现算法与曲线含义
 
 1.  **Coordinate Descent (BCD)**: 块坐标下降法
@@ -155,7 +155,7 @@ $$\min_{\beta} \frac{1}{2n} \|| y - X\beta \||_2^2 + \lambda \|| \beta \||_1$$
 - **参数调优**: 对ADMM至关重要，对其他算法影响相对较小
 - **加速技术**: 对一阶方法普遍有效，但可能引入振荡
 
-## 🔬 关键发现与工程启示
+## 🔬 关键发现
 
 ### 1. 性能主导因素
 - **算法选择**比**参数调优**对最终性能影响更大
@@ -201,4 +201,5 @@ pip install numpy matplotlib scikit-learn
 ```bash
 python 最优化1.py
 ```
+
 
