@@ -7,7 +7,7 @@
 本项目通过系统的数值实验，全面比较了多种优化算法及其变体在求解 **LASSO (Least Absolute Shrinkage and Selection Operator)** 回归问题时的收敛性能。研究不仅涵盖了经典算法，还深入分析了**动态策略**（如重启机制、参数调优）对算法性能的影响机制。
 
 目标函数定义为：
-$$\min_{\beta} \frac{1}{2n} \| y - X\beta \|_2^2 + \lambda \| \beta \|_1$$
+$$\min_{\beta} \frac{1}{2n} \|| y - X\beta \||_2^2 + \lambda \|| \beta \||_1$$
 
 ## 🛠️ 实验设置 (Experimental Setup)
 
@@ -15,17 +15,25 @@ $$\min_{\beta} \frac{1}{2n} \| y - X\beta \|_2^2 + \lambda \| \beta \|_1$$
 * **数据维度**: 样本量 $n=200$, 特征数 $p=50$
 * **稀疏性设置**: 真实参数向量中仅前10个元素非零
 * **正则化强度**: $\lambda = 0.1 \times \lambda_{\text{max}}$, 其中 $\lambda_{\text{max}} = \|X^Ty\|_\infty/n$
-* **实验机制**: 独立重复实验 **50次**，确保统计显著性
+* **实验机制**: 独立重复实验 **100次**，确保统计显著性
 * **基准真值**: 使用scikit-learn的Lasso求解器获得高精度 $f^*$ 参考值
 
 ### 可视化方案
 * **细淡色线 (Cloud Traces)**: 单次实验轨迹，反映算法稳定性
 * **粗实线 (Mean Performance)**: 平均收敛路径，表征期望性能
 * **对数坐标**: y轴采用对数尺度，清晰展示收敛速率差异
+![LASSO Convergence Plot](Figure_2.png)
+*(图示：100次随机实验下的算法收敛曲线对比)*
 
-## 🚀 算法实现与曲线含义详解
+根据实验结果（如上图所示），我们观察到：
+## 🚀 实现算法与曲线含义
 
-### 1. 坐标下降法系列 (Coordinate Descent)
+1.  **Coordinate Descent (BCD)**: 块坐标下降法
+2.  **Huber Gradient Descent**: 基于 Huber 平滑逼近的梯度下降法
+3.  **FISTA**: 快速迭代收缩阈值算法 (Nesterov 加速)
+4.  **ADMM**: 交替方向乘子法 (包含参数敏感性分析)
+
+### 1. 块坐标下降法系列 (Coordinate Descent)
 
 **Coordinate Desc (红色实线)**
 - **算法原理**: 每次迭代沿单个坐标方向进行精确最小化，利用LASSO问题的可分性结构
@@ -84,7 +92,7 @@ $$\min_{\beta} \frac{1}{2n} \| y - X\beta \|_2^2 + \lambda \| \beta \|_1$$
 
 ## 📊 系统性对比分析
 
-### 1. 算法家族内部对比
+### 1. 算法内部对比
 
 #### Huber方法族比较
 ```
@@ -104,13 +112,14 @@ $$\min_{\beta} \frac{1}{2n} \| y - X\beta \|_2^2 + \lambda \| \beta \|_1$$
 
 #### ADMM参数敏感性
 ```
+（在 ADMM 算法中，惩罚参数 $\rho$ (rho) 是影响收敛效率的关键超参数。为了寻找最优解，我们对 $\rho$ 进行了敏感性测试，取值范围为 $\{0.5, 1, 2, 5\}$。）
 性能排序: rho=1 > rho=2 > rho=0.5 > rho=5
 稳定性: 所有参数下均表现稳定
 参数影响: 收敛速度对rho值高度敏感
 ```
 **结论**: ADMM的性能严重依赖于参数选择，需要仔细调优
 
-### 2. 跨算法横向对比
+### 2. 算法横向对比
 
 #### 收敛速度排名
 1. **Coordinate Descent** - 指数级快速收敛
@@ -133,7 +142,7 @@ $$\min_{\beta} \frac{1}{2n} \| y - X\beta \|_2^2 + \lambda \| \beta \|_1$$
 | ADMM (调优后)      | ★★★☆☆    | ★★★★☆  | ★★★★★      | 分布式大规模 | ★★★★☆      |
 | Huber系列          | ★★☆☆☆    | ★★★☆☆  | ★★★☆☆      | 理论研究     | ★★☆☆☆      |
 
-### 3. 理论洞察与实证发现
+### 3. 理论分析
 
 #### 收敛机理差异
 - **坐标下降**: 利用问题的可分性结构，每次更新都带来显著目标函数下降
@@ -190,5 +199,6 @@ pip install numpy matplotlib scikit-learn
 
 ### 运行完整实验
 ```bash
-python lasso_convergence_comparison.py
+python 最优化1.py
 ```
+
