@@ -17,15 +17,15 @@ $$\min_{\beta} \frac{1}{2n} \| y - X\beta \|_2^2 + \lambda \| \beta \|_1$$
 * **正则化强度**: $\lambda = 0.1 \times \lambda_{\text{max}}$, 其中 $\lambda_{\text{max}} = \|X^Ty\|_\infty/n$
 * **实验机制**: 独立重复实验 **100次**，确保统计显著性
 * **基准真值**: 使用scikit-learn的Lasso求解器获得高精度 $f^*$ 参考值
-![LASSO Convergence Plot](Figure_2.png)
-*(图示：100次随机实验下的算法收敛曲线对比)*
+
 
 ### 可视化方案
 * **细淡色线 (Cloud Traces)**: 单次实验轨迹，反映算法稳定性
 * **粗实线 (Mean Performance)**: 平均收敛路径，表征期望性能
 * **对数坐标**: y轴采用对数尺度，清晰展示收敛速率差异
 
-
+![LASSO Convergence Plot](Figure_2.png)
+*(图示：100次随机实验下的算法收敛曲线对比)*
 ## 🚀 实现算法与曲线含义
 
 1.  **Coordinate Descent (BCD)**: 块坐标下降法
@@ -200,6 +200,7 @@ pip install numpy matplotlib scikit-learn
 ```bash
 python 最优化1.py
 ```
+
 
 
 
